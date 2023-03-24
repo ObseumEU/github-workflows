@@ -56,7 +56,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: ${{ inputs.context }
+          # context: ${{ inputs.context }
           push: true
           file: ${{ inputs.dockerFile }}
           tags: ${{ inputs.image }}:latest,${{ inputs.image }}:${{ steps.date.outputs.date }}
