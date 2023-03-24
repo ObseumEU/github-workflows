@@ -17,7 +17,11 @@ on:
     secrets:
       ACCESS_TOKEN:
         required: true
-
+      DOCKER_USER:
+        required: true
+      DOCKER_PASS:
+        required: true
+        
 jobs:
   docker:
     runs-on: ubuntu-latest
