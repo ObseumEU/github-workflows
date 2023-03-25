@@ -65,6 +65,6 @@ jobs:
         with:
           context: ${{ inputs.context }
           push: true
-          file: ${{ inputs.dockerFile }}
+          file: ${{ inputs.dockerfile }}
           tags: ${{ inputs.image }}:latest,${{ inputs.image }}:${{ steps.date.outputs.date }}
           github: ${{ secrets.ACCESS_TOKEN }}
