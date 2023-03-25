@@ -67,5 +67,4 @@ jobs:
           push: true
           file: ${{ inputs.dockerFile }}
           tags: ${{ inputs.image }}:latest,${{ inputs.image }}:${{ steps.date.outputs.date }}
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.ACCESS_TOKEN }}
+          github: ${{ secrets.ACCESS_TOKEN }}
