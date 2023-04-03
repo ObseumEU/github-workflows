@@ -33,10 +33,6 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-      - name: Tag and push current repo code
-        run: |
-          git tag ${{ steps.date.outputs.date }}
-          git push origin ${{ steps.date.outputs.date }}
       -
         name: Docker meta
         id: meta
@@ -68,3 +64,7 @@ jobs:
           file: ${{ inputs.dockerfile }}
           tags: ${{ inputs.image }}:latest,${{ inputs.image }}:${{ steps.date.outputs.date }}
           github: ${{ secrets.ACCESS_TOKEN }}
+      - name: Tag and push current repo code
+        run: |
+          git tag ${{ steps.date.outputs.date }}
+          git push origin ${{ steps.date.outputs.date }}
