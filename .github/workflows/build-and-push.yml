@@ -64,6 +64,8 @@ jobs:
           file: ${{ inputs.dockerfile }}
           tags: ${{ inputs.image }}:latest,${{ inputs.image }}:${{ steps.date.outputs.date }}
           github: ${{ secrets.ACCESS_TOKEN }}
+          cache-from: type=gha 
+          cache-to: type=gha,mode=max      
       - name: Tag and push current repo code
         run: |
           git tag ${{ steps.date.outputs.date }}
