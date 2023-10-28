@@ -14,6 +14,10 @@ on:
         required: false
         type: string
         default: .
+      tests:
+        required: false
+        type: boolean
+        default: false
     secrets:
       ACCESS_TOKEN:
         required: true
@@ -66,7 +70,7 @@ jobs:
           github: ${{ secrets.ACCESS_TOKEN }}
           cache-from: type=gha 
           build-args: |
-            RUN_TESTS=true
+            RUN_TESTS=${{ inputs.tests }}
           cache-to: type=gha,mode=max      
       - name: Tag and push current repo code
         run: |
