@@ -76,3 +76,14 @@ jobs:
         run: |
           git tag ${{ steps.date.outputs.date }}
           git push origin ${{ steps.date.outputs.date }}
+          
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Release ${{ steps.date.outputs.date }}
+          draft: false
+          prerelease: false
