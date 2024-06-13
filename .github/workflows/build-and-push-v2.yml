@@ -31,7 +31,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%dT%H%M%S')"
+        run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
       
       - name: Checkout submodules
         uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
           
       - name: Publish and push the container image
         run: |
-          DATE=$(date +'%Y%m%dT%H%M%S')
+          DATE=$(date +'%Y%m%d%H%M%S')
           dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags="latest,$DATE"
 
       - name: Create GitHub Release
