@@ -1,4 +1,4 @@
-name: Publish to Dockerhub registry
+name: Publish to Docker Hub
 
 on: 
   workflow_call:
@@ -28,40 +28,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H-%M-%S')"
-      - uses: actions/checkout@v4
+      
+      - name: Checkout submodules
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
-      -
-        name: Docker meta
+      
+      - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
           images: |
-            ${{ inputs.image }}
+            ${{ inputs.image-name }}
           tags: |
             type=semver,pattern={{version}}
-      -
-        name: Set up QEMU
+      
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '${{ inputs.dotnet-version }}'
           
-      - name: Publish and push the container image
+      - name: Login to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
           mkdir -p ~/.docker
-          echo "{\"auths\":{\"registry.hub.docker.com\":{\"auth\":\"$(echo -n ${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASS }} | base64)\"}}}" > ~/.docker/config.json
-          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:ContainerRepository=${{ inputs.image-name }} /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=registry.hub.docker.com /p:UserName=${{ secrets.DOCKER_USER }} /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:LastUsedPlatform="Any CPU" /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:AutoGenerateImageTag=true /p:TargetFramework=net8.0 /p:SelfContained=false
+          echo "{\"auths\":{\"index.docker.io\":{\"auth\":\"$(echo -n ${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASS }} | base64)\"}}}" > ~/.docker/config.json
+
+      - name: Publish and push the container image
+        run: |
+          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:ContainerRepository=${{ inputs.image-name }} /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=${{ secrets.DOCKER_USER }} /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:LastUsedPlatform="Any CPU" /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:AutoGenerateImageTag=true /p:TargetFramework=net8.0 /p:SelfContained=false
 
       - name: Create GitHub Release
         id: create_release
