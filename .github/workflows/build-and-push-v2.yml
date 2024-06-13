@@ -61,7 +61,7 @@ jobs:
           echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
           mkdir -p ~/.docker
           echo "{\"auths\":{\"index.docker.io\":{\"auth\":\"$(echo -n ${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASS }} | base64)\"}}}" > ~/.docker/config.json
-          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags="latest,${{ steps.date.outputs.date }}"
+          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags="latest,${{ steps.date.outputs.date | gsub(':', '-') }}"
 
       - name: Create GitHub Release
         id: create_release
