@@ -58,8 +58,10 @@ jobs:
           
       - name: Publish and push the container image
         run: |
+          mkdir -p ~/.docker
+          echo "{\"auths\":{\"registry.hub.docker.com\":{\"auth\":\"$(echo -n ${{ secrets.DOCKER_USER }}:${{ secrets.DOCKER_PASS }} | base64)\"}}}" > ~/.docker/config.json
           echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
-          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:ContainerImageName=${{ inputs.image-name }} /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=registry.hub.docker.com /p:UserName=${{ secrets.DOCKER_USER }} /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:LastUsedPlatform="Any CPU" /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:AutoGenerateImageTag=true /p:TargetFramework=net8.0 /p:SelfContained=false
+          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:ContainerRepository=${{ inputs.image-name }} /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=registry.hub.docker.com /p:UserName=${{ secrets.DOCKER_USER }} /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:LastUsedPlatform="Any CPU" /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:AutoGenerateImageTag=true /p:TargetFramework=net8.0 /p:SelfContained=false
 
       - name: Create GitHub Release
         id: create_release
