@@ -69,7 +69,7 @@ jobs:
           
       - name: Publish and push the container image
         run: |
-          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags='"${{ env.DATE }};latest"'
+          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags='"${{ env.DATE }};latest"' /p:ContainerRepository=${{ inputs.image-name }}
 
       - name: Create GitHub Release
         id: create_release
