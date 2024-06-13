@@ -3,6 +3,9 @@ name: Publish to Docker Hub
 on: 
   workflow_call:
     inputs:
+      servicename:  
+        required: true
+        type: string
       image-name:
         required: true
         type: string
@@ -74,7 +77,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.DATE }}
+          tag_name: ${{ inputs.servicename }}${{ env.DATE }}
           release_name: Release ${{ env.DATE }}
           draft: false
           prerelease: false
