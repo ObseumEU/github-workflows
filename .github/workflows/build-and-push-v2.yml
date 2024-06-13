@@ -44,15 +44,6 @@ jobs:
           submodules: recursive
           token: ${{ secrets.ACCESS_TOKEN }}
       
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ inputs.image-name }}
-          tags: |
-            type=semver,pattern={{version}}
-      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
