@@ -31,7 +31,9 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
+        run: |
+          DATE=$(date +'%Y%m%d%H%M%S')
+          echo "::set-output name=date::$DATE"
       
       - name: Checkout submodules
         uses: actions/checkout@v4
