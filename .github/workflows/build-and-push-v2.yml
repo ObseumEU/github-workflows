@@ -33,7 +33,7 @@ jobs:
         id: date
         run: |
           DATE=$(date +'%Y%m%d%H%M%S')
-          echo "date=$DATE" >> $GITHUB_ENV
+          echo "DATE=$DATE" >> $GITHUB_ENV
       
       - name: Checkout submodules
         uses: actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
           
       - name: Publish and push the container image
         run: |
-          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags="latest,${{ env.date }}"
+          dotnet publish ${{ inputs.project_path }} --os linux --arch x64 -c Release /p:WebPublishMethod=Container /p:ContainerPublishMethod=NetSdk /p:RegistryUrl=index.docker.io /p:UserName=smixers /p:PublishProvider=ContainerRegistry /p:LastUsedBuildConfiguration=Release /p:RuntimeIdentifier=linux-x64 /p:_TargetId=NetSdkDockerContainerRegistry /p:ContainerImageTags="latest,${{ env.DATE }}"
 
       - name: Create GitHub Release
         id: create_release
@@ -74,7 +74,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.date }}
-          release_name: Release ${{ env.date }}
+          tag_name: ${{ env.DATE }}
+          release_name: Release ${{ env.DATE }}
           draft: false
           prerelease: false
